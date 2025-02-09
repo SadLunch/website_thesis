@@ -13,8 +13,23 @@ const io = new Server(server, {
   }
 });
 
+
 app.use(cors());
 app.use(express.json()); // Allow JSON payloads
+
+let experienceData = {};
+
+const experiences = [
+  { id: "experience1", title: "Bertrand", location: "Bertrand", coordinates: [38.710712892523695, -9.14116628132217] },
+  { id: "experience2", title: "Modelo", location: "Modelo", coordinates: [38.709899442837504, -9.141786418367884] },
+  { id: "experience3", title: "Estatua", location: "Estatua", coordinates: [38.71051049617013, -9.142228602930569] },
+  { id: "experience4", title: "MUP", location: "MUP", coordinates: [38.709363862713104, -9.141031676168348] },
+];
+
+// API Route: Get experience data
+app.get("/experiences", (req, res) => {
+  res.json(experiences);
+});
 
 // WebSocket Logic
 let experienceUsers = {}; // Stores people count per experience
@@ -26,10 +41,7 @@ io.on("connection", (socket) => {
   socket.emit("updatePeopleCount", experienceUsers);
 
   socket.on("joinExperience", (experienceId) => {
-    if (!experienceUsers[experienceId]) {
-      experienceUsers[experienceId] = 0;
-    }
-    experienceUsers[experienceId] += 1;
+    experienceUsers[experienceId] = (experienceUsers[experienceId] || 0) + 1;
     io.emit("updatePeopleCount", experienceUsers);
   });
 
