@@ -8,7 +8,7 @@ function ExperiencePage() {
   const { experiences } = useContext(ExperienceContext);
   const { id } = useParams();
 
-  const experience = experiences.find((exp) => exp.id === parseInt(id));
+  const experience = experiences.find((exp) => exp.id === id);
 
   if (!experience) return <p>Experience not found.</p>;
 
